@@ -43,7 +43,12 @@ namespace FriendsWebApp.Controllers
             //_context.LinkFriends(1, 3);
             //_context.LinkFriends(2, 3);
             IList<Person> PeopleList = _context.GetPeople();
-            //return Json(new { peopleList = PeopleList }, JsonRequestBehavior.AllowGet);
+            return View();
+        }
+
+        public IActionResult GetPeople()
+        {
+            IList<Person> PeopleList = _context.GetPeople();
             return Json(PeopleList);
         }
 
