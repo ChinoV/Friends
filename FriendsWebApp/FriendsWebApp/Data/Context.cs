@@ -184,7 +184,24 @@ namespace FriendsWebApp.Data
         {
             try
             {
-                return null;
+                List<Person> People = new List<Person>();
+                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName FROM [dbo].[GetFriends]", _database);
+                cmd.CommandTimeout = 0;
+
+                _database.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        People.Add(new Person()
+                        {
+                            Name = Convert.ToString(reader["Name"]),
+                            LastName = Convert.ToString(reader["LastName"])
+                        });
+                    }
+                    _database.Close();
+                    return People;
+                }
             }
             catch (Exception)
             {
@@ -196,7 +213,24 @@ namespace FriendsWebApp.Data
         {
             try
             {
-                return null;
+                List<Person> People = new List<Person>();
+                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName FROM [dbo].[GetMyPeople]", _database);
+                cmd.CommandTimeout = 0;
+
+                _database.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        People.Add(new Person()
+                        {
+                            Name = Convert.ToString(reader["Name"]),
+                            LastName = Convert.ToString(reader["LastName"])
+                        });
+                    }
+                    _database.Close();
+                    return People;
+                }
             }
             catch (Exception)
             {
@@ -206,7 +240,8 @@ namespace FriendsWebApp.Data
 
         public List<Person> GetPeople()
         {
-
+            try
+            {
                 List<Person> People = new List<Person>();
                 SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName FROM People", _database);
                 cmd.CommandTimeout = 0;
@@ -219,14 +254,17 @@ namespace FriendsWebApp.Data
                         People.Add(new Person()
                         {
                             Name = Convert.ToString(reader["Name"]),
-                            LastName = Convert.ToString(reader["LastName"])                            
+                            LastName = Convert.ToString(reader["LastName"])
                         });
                     }
                     _database.Close();
                     return People;
                 }
-            
-
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

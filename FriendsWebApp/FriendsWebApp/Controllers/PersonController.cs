@@ -42,7 +42,6 @@ namespace FriendsWebApp.Controllers
             //_context.LinkFriends(1, 2);
             //_context.LinkFriends(1, 3);
             //_context.LinkFriends(2, 3);
-            //IList<Person> PeopleList = _context.GetPeople();
             return View();
         }
 
