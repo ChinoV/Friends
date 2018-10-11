@@ -21,27 +21,27 @@ namespace FriendsWebApp.Controllers
         //get
         public IActionResult Index()
         {
-            _context.AddPerson(new Person
-            {
-                Name = "James",
-                LastName = "Howlett"
-            });
+            //_context.AddPerson(new Person
+            //{
+            //    Name = "James",
+            //    LastName = "Howlett"
+            //});
 
-            _context.AddPerson(new Person
-            {
-                Name = "Eric",
-                LastName = "Lehnsherr"
-            });
+            //_context.AddPerson(new Person
+            //{
+            //    Name = "Eric",
+            //    LastName = "Lehnsherr"
+            //});
 
-            _context.AddPerson(new Person
-            {
-                Name = "Charles",
-                LastName = "Xavier"
-            });
+            //_context.AddPerson(new Person
+            //{
+            //    Name = "Charles",
+            //    LastName = "Xavier"
+            //});
 
-            _context.LinkFriends(1, 2);
-            _context.LinkFriends(1, 3);
-            _context.LinkFriends(2, 3);
+            //_context.LinkFriends(1, 2);
+            //_context.LinkFriends(1, 3);
+            //_context.LinkFriends(2, 3);
             IList<Person> PeopleList = _context.GetPeople();
             //return Json(new { peopleList = PeopleList }, JsonRequestBehavior.AllowGet);
             return Json(PeopleList);

@@ -1,4 +1,5 @@
 ﻿using FriendsWebApp.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace FriendsWebApp.Data
 {
-    public class Context
+    public class Context: DbContext
     {
         private SqlConnection _database;
-        public Context()
+        public Context(DbContextOptions<Context> options)
+       : base(options)
         {
             _database = new SqlConnection("Data Source=.;Initial Catalog=FriendsDB;Integrated Security=True");
         }
