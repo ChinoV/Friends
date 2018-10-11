@@ -13,9 +13,9 @@ namespace FriendsWebApp.Data
         private SqlConnection _database;
         private Context() { }
 
-        public Context(string connectionString)
+        public Context()
         {
-            _database = new SqlConnection(connectionString);
+            _database = new SqlConnection("Data Source=.;Initial Catalog=FriendsDB;Integrated Security=True");
         }
 
         public Person GetPerson(int id)
