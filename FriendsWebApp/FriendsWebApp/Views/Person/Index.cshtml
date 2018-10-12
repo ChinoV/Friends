@@ -14,12 +14,10 @@
 
     <script>
         $(document).ready(function () {
-            listar();
-
              //<!--DataTables  Initialization -- >
             $.ajax({
                 type: "GET",
-                url: "http://localhost:55085/Person/GetAllFarms",
+                url: "http://localhost:61293//Person//GetPeople",
                 data: "",
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
@@ -30,51 +28,27 @@
                         "order": [[1, "asc"]],
                         "data": data,
                         "columns": [             
-                            { "data": "PersonId" },
-                            { "data": "Name" },
-                            { "data": "LastName" },
-                            {
-                                "defaultContent": "<button type=\"button\" data-toggle='modal' data-target='#DeleteModal' class=\"glyphicon glyphicon-trash\" onclick = \"removeRow(this)\"></button>" +
-                                    "<button type=\"button\" data-toggle='modal' data-target='#myModal' onclick =\"editRow(this)\" class = \"glyphicon glyphicon-pencil\"></button>" +
-                                    "<button type=\"button\" onclick =\"windowParcel(this)\" class = \"glyphicon glyphicon-eye-open\"> </button>"
-                            }
+                            { "data": "personId" },
+                            { "data": "name" },
+                            { "data": "lastName" },
+                            { "defaultContent": "<button>Edit</button> <button>Delete</button> <button>Add friend</button> <button>Remove friend</button> <button>Show friends</button>" }
                         ],
                         "columnDefs": [
-                            { "targets": [0, 4], "orderable": false }
+                            {
+                                "targets": [0],
+                                "visible": false,
+                                "searchable": false
+                            }
                         ]
                     });
 
                 },
                 error: function () {
-                    ValidateMyAlert("Class='alert alert-danger'", 'error', 'Danger', "#alertContainer");
+                    Console.log("error, ajax couldn't charge the table")
                 }
             });
         });
 
-        var listar = function () {
-            var table = $("#PeopleTable").DataTable({
-                "columnDefs": [
-                    {
-                        "targets": [0],
-                        "visible": false,
-                        "searchable": false
-                    }
-                ],
-                "destroy": true,
-                // "ajax": {
-
-                // },
-                responsive: true,
-                "order": [[1, "asc"]],
-                "data": data,
-                "columns": [
-                    { "data": "Id" },
-                    { "data": "firstName" },
-                    { "data": "lastName" },
-                    { "defaultContent": "<button>Edit</button> <button>Delete</button> <button>Add friend</button> <button>Remove friend</button> <button>Show friends</button>" }
-                ]
-            });
-        }
 
         var person = { Id: "1", firstName: "John", lastName: "Doe" };
         var person2 = { Id: "2", firstName: "lung", lastName: "chang" };
