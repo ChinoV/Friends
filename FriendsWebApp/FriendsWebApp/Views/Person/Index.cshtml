@@ -9,12 +9,18 @@
     <script type="text/javascript" src=" https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src=" https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-    <!--Ajax-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
 
     <script>
         $(document).ready(function () {
-             //<!--DataTables  Initialization -- >
+
+
+             //<!--Chargin DataTables   -- >
             $.ajax({
                 type: "GET",
                 url: "http://localhost:61293//Person//GetPeople",
@@ -46,21 +52,56 @@
                 error: function () {
                     Console.log("error, ajax couldn't charge the table")
                 }
+
             });
+
+
         });
 
 
-        var person = { Id: "1", firstName: "John", lastName: "Doe" };
-        var person2 = { Id: "2", firstName: "lung", lastName: "chang" };
-        var data = [person, person2]
+
     </script>
 </head>
 <body>
     <div class="container">
-        <h2>People List</h2>
-        <!--<button type='button' class='Add btn btn-success fa fa-plus'><i class='glyphicon glyphicon-plus'></i></button>-->
+        <br>
 
-        <button>Add new person</button>
+        <h2>People List</h2>
+        <div class="text-center">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalPerson">
+                Add person
+            </button>
+        </div>
+
+        <div class="modal fade" id="ModalPerson" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    2
+                    <div class="modal-header text-center">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title w-100 font-weight-bold">Person</h4>
+
+                    </div>
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+                            <i class="fa fa-user  prefix grey-text"></i>
+                            <input type="text" id="formName" class="form-control validate">
+                            <label data-error="wrong" data-success="right" for="formName">Your name</label>
+                        </div>
+                        <div class="md-form mb-5">
+                            <i class="fa fa-vcard-o prefix grey-text"></i>
+                            <input type="text" id="formLastName" class="form-control validate">
+                            <label data-error="wrong" data-success="right" for="formLastName">Last Name</label>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button class="btn btn-unique">Send <i class="fa fa-paper-plane-o ml-1"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <table id="PeopleTable" class="display" style="width:100%">
             <thead>
