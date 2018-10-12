@@ -13,14 +13,11 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
-
-
     <script>
         $(document).ready(function () {
 
 
-             //<!--Chargin DataTables   -- >
+            //<!--Chargin DataTables   -- >
             $.ajax({
                 type: "GET",
                 url: "http://localhost:61293//Person//GetPeople",
@@ -33,11 +30,19 @@
                         responsive: true,
                         "order": [[1, "asc"]],
                         "data": data,
-                        "columns": [             
+                        "columns": [
                             { "data": "personId" },
                             { "data": "name" },
                             { "data": "lastName" },
-                            { "defaultContent": "<button>Edit</button> <button>Delete</button> <button>Add friend</button> <button>Remove friend</button> <button>Show friends</button>" }
+                            {
+                                "defaultContent": "<div style =\"text-align:center;\">"
+                                    + "<button class=\"btn btn-info text-white\" title=\"Edit\"><i class=\"fa fa-edit\"></i></button>  "
+                                    + "<button class=\"btn btn-danger text-white\" title=\"Delete\"><i class=\"fa fa-trash\"></i></button>  "
+                                    + "<button> Add friend</button>  "
+                                    + "<button> Remove friend</button>  "
+                                    + "<button class=\"btn btn-warning text-white\" title=\"ShowFriends\"><i class=\"fa fa-eye\"></i></button>  "
+                                    + "</div>"
+                            }
                         ],
                         "columnDefs": [
                             {
@@ -58,6 +63,33 @@
 
         });
 
+        function CreatePerson() {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:61293//Person//Create",
+                data: JSON.stringify({
+                    Name: $("#formName").val(),
+                    LastName: $("#formLastName").val()
+                }),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data) {
+                        var obj = {
+                            Id: data.Id,
+                            Name: data.Name,
+                            Description: data.Description
+                        };
+                        $table.row.add(obj).draw();
+                        $("#closeMyModal").click();
+                    }
+                    else { ValidateMyAlert("Class='alert alert-warning'", 'Could not be added', 'Warning', "#alertContainer"); }
+                },
+                error: function () {
+                    Console.log("error, ajax couldn't Create a person")
+                }
+            });
+        }
 
 
     </script>
@@ -66,19 +98,16 @@
     <div class="container">
         <br>
 
-        <h2>People List</h2>
-        <div class="text-center">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalPerson">
-                Add person
-            </button>
-        </div>
+        <h2 class="text-center">People List</h2>
 
+        <a class="btn btn-primary" data-toggle="modal" data-target="#ModalPerson"><strong>Nuevo</strong> <i class="fa fa-plus"></i></a>
+        <br />
+        <br />
         <div class="modal fade" id="ModalPerson" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    2
                     <div class="modal-header text-center">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" id="closeMyModal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h4 class="modal-title w-100 font-weight-bold">Person</h4>
@@ -96,14 +125,14 @@
                             <label data-error="wrong" data-success="right" for="formLastName">Last Name</label>
                         </div>
                         <div class="modal-footer d-flex justify-content-center">
-                            <button class="btn btn-unique">Send <i class="fa fa-paper-plane-o ml-1"></i></button>
+                            <button class="btn btn-success"id="BtnCreatePerson" onclick="CreatePerson()">Crear</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <table id="PeopleTable" class="display" style="width:100%">
+        <table id="PeopleTable" class="table table-bordered table-striped" style="width:100%">
             <thead>
                 <tr>
                     <th>ID</th>
