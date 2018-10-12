@@ -42,6 +42,7 @@ namespace FriendsWebApp.Controllers
             //_context.LinkFriends(1, 2);
             //_context.LinkFriends(1, 3);
             //_context.LinkFriends(2, 3);
+
             return View();
         }
 
