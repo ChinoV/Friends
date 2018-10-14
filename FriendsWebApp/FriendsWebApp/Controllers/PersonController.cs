@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FriendsWebApp.Data;
+﻿using FriendsWebApp.Data;
 using FriendsWebApp.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace FriendsWebApp.Controllers
 {
@@ -60,8 +56,9 @@ namespace FriendsWebApp.Controllers
 
         //post
         [HttpPost]
-        public IActionResult Create([Bind("Name,LastName")] Person person)
+        public IActionResult Create([FromBody]Person person)
         {
+
             if (_context.AddPerson(person))
             {
                 return Json(new { success = true });
