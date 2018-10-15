@@ -191,7 +191,7 @@ namespace FriendsWebApp.Data
             }
         }
 
-        public bool RemoveFriendhip(int id, int idToRemove)
+        public bool RemoveFriendship(int id, int idToRemove)
         {
             try
             {
@@ -200,7 +200,7 @@ namespace FriendsWebApp.Data
                 {
                     cmd.CommandTimeout = 0;
                     cmd.CommandText = @"USE [FriendsDB]
-                                    EXECUTE [dbo].[RemoveFriendhip] 
+                                    EXECUTE [dbo].[RemoveFriendship] 
                                         @PersonId
                                         ,@PersonId2";
                     cmd.Parameters.Add("PersonId", SqlDbType.Int).Value = id;
@@ -226,7 +226,7 @@ namespace FriendsWebApp.Data
             try
             {
                 List<Person> People = new List<Person>();
-                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName, PersonId FROM [dbo].[GetFriends]", _database);
+                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName, PersonId FROM [dbo].[GetFriends](" + id + ")", _database);
                 cmd.CommandTimeout = 0;
 
                 _database.Open();
