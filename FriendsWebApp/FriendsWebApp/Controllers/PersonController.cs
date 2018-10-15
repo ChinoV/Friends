@@ -69,21 +69,21 @@ namespace FriendsWebApp.Controllers
 
         //get
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromBody]Person person)
         {
             try
             {
-                if (_context.RemovePerson(id))
+                if (_context.RemovePerson(person.PersonId))
                 {
                     return Json(new { success = true });
                 }
-                
+
                 return Json(new { success = false });
             }
             catch (System.Exception)
             {
                 return Json(new { success = false });
-            }             
+            }
         }
 
         //get
