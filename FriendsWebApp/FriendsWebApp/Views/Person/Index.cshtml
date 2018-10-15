@@ -39,7 +39,7 @@
                                     + "<button class=\"btn btn-warning text-white\" title=\"ShowFriends\"><i class=\"fa fa-eye\"></i></button>  "
                                     + "<button class='btn btn-info text-white' data-toggle='modal' data-target='#ModalPerson' title='Edit'  onclick = \"editRow(this)\"><i class='fa fa-edit'></i></button>  "
                                     + "<button  id='btnAddFriend' class='btn btn-success text-white' data-toggle='modal' data-target='#ModalFriend' onclick = \"ChargeFriendSelect(this)\"><i class='fa fa-user-plus'></i></button>  "
-                                    + "<button  class='btn btn-danger text-white'><i class='fa fa-user-times'></i></button>  "
+                                    + "<button  class='btn btn-danger text-white'data-toggle='modal' data-target='#ModalFriend' onclick = \"ChargeFriendSelect(this)\"><i class='fa fa-user-times'></i></button>  "
                                     + "<button class='btn btn-danger text-white' data-toggle='modal' data-target='#DeleteModalPerson' onclick = \"removePerson(this)\" title='Delete'><i class='fa fa-trash'></i></button>  "
                                     + "</div>"
                             }
@@ -103,7 +103,7 @@
                 });
                 $("#closeDeleteModal").click();
             })
-
+            
         });
 
         function CreatePerson() {
@@ -203,22 +203,48 @@
             var ActualRow = $(button).parents("tr");
             var rowIndex = $table.row(ActualRow).index();
             var row = $table.row(rowIndex).data();
-            var actualId = $("#ActualId").val(row.personId);
+            $("#ActualId").val(row.personId);
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "/Person/GetNoneFriends",
-                data: json.stringify(actualId),
+                data: JSON.stringify($("#ActualId").val(), 2),
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
-                    console.log(data);
 
+                    var listItems = '<option selected="selected" value="0">- Select -</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        listItems += "<option value='" + data[i].personId + "'>" + data[i].name + "</option>";
+                    }
+                    $("#listPeople").html(listItems);
                 },
                 error: function () {
-                    Console.log("error, ajax couldn't charge the table")
+                    console.log("error, ajax couldn't charge the table");
                 }
+            });
+            $('#modalHeaderFriendTitle').html('Add New Friend');
+            
+        }
 
-            }
+        //<!--add friend relationship-- >
+        function linkFriends() {
+            $.ajax({
+                type: "POST",
+                url: "/Person/LinkFriends",
+                data: JSON.stringify({
+                    personId1: $("#ActualId").val(),
+                    personId2: $("#listPeople option:selected").val()
+                }),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    
+                },
+                error: function () {
+                    console.log("error, ajax couldn't charge the table");
+                }
+            });
+        }
 
     </script>
 </head>
@@ -305,7 +331,7 @@
         </div>
     </div>
 
-    <!--modal de agregar amigo-->
+    <!--modal de agregar amigo y eliminar-->
     <div>
         <form id="frmAddFriend" action="" method="POST">
             <input type="hidden" id="ActualId" name="Id" value="">
@@ -324,10 +350,9 @@
                                 <option></option>
                             </select>
 
-                            <input type="hidden" id="friendId" name="Id" value="" />
 
                             <div class="modal-footer d-flex justify-content-center">
-                                <button class="btn btn-unique">Send <i class="fa fa-paper-plane-o ml-1"></i></button>
+                                <button class="btn btn-unique" onclick="linkFriends()">Send <i class="fa fa-paper-plane-o ml-1"></i></button>
                             </div>
                         </div>
                     </div>
