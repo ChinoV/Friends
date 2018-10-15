@@ -50,10 +50,42 @@ namespace FriendsWebApp.Controllers
         }
 
         //get
-        public IActionResult GetNewFriends([FromBody]int personId)
+        public IActionResult GetNoneFriends([FromBody]int personId)
         {
             IList<Person> PeopleList = _context.GetNoneFriends(personId);
             return Json(PeopleList);
+        }
+
+        //get
+        public IActionResult GetFriends([FromBody]int personId)
+        {
+            try
+            {
+                IList<Person> PeopleList = _context.GetFriends(personId);
+                return Json(PeopleList);
+            }
+            catch (System.Exception)
+            {
+                return Json(new { success = false });
+            }
+           
+        }
+
+        //get
+        public IActionResult RemoveFriendhip([FromBody]int personId, [FromBody]int personId2)
+        {
+            try
+            {                
+                if (_context.RemoveFriendhip(personId, personId2))
+                {
+                    return Json(new { success = true });
+                }
+                return Json(new { success = false }); 
+            }
+            catch (System.Exception)
+            {
+                return Json(new { success = false });
+            }            
         }
 
         //get

@@ -23,7 +23,7 @@ namespace FriendsWebApp.Data
             try
             {
                 Person person = new Person();
-                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName, PersonId FROM [dbo].[GetFriends] WHERE Id = " + id, _database);
+                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName, PersonId FROM PEOPLE WHERE Id = " + id, _database);
                 cmd.CommandTimeout = 0;
 
                 _database.Open();
