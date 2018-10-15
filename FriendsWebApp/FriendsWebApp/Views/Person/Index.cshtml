@@ -232,8 +232,8 @@
                 type: "POST",
                 url: "/Person/LinkFriends",
                 data: JSON.stringify({
-                    personId1: $("#ActualId").val(),
-                    personId2: $("#listPeople option:selected").val()
+                    Id1: $("#ActualId").val(),
+                    Id2: $("#listPeople option:selected").val()
                 }),
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
@@ -244,6 +244,7 @@
                     console.log("error, ajax couldn't charge the table");
                 }
             });
+
         }
 
     </script>
