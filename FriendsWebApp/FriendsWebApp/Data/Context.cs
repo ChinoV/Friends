@@ -50,7 +50,7 @@ namespace FriendsWebApp.Data
             try
             {
                 Person person = new Person();
-                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT PersonId, Name, LastName FROM People ORDER BY PersonId DESC", _database);
+                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT PersonId, Name, LastName FROM People ORDER BY PersonId", _database);
                 cmd.CommandTimeout = 0;
 
                 _database.Open();
@@ -90,7 +90,7 @@ namespace FriendsWebApp.Data
                     check = cmd.ExecuteNonQuery();
                     _database.Close();
                 }
-                if (check < 0)
+                if (check > 0)
                 {
                     return true;
                 }
@@ -118,7 +118,7 @@ namespace FriendsWebApp.Data
                     check = cmd.ExecuteNonQuery();
                     _database.Close();
                 }
-                if (check < 0)
+                if (check > 0)
                 {
                     return true;
                 }
@@ -150,7 +150,7 @@ namespace FriendsWebApp.Data
                     check = cmd.ExecuteNonQuery();
                     _database.Close();
                 }
-                if (check < 0)
+                if (check > 0)
                 {
                     return true;
                 }
@@ -180,7 +180,7 @@ namespace FriendsWebApp.Data
                     check = cmd.ExecuteNonQuery();
                     _database.Close();
                 }
-                if (check < 0)
+                if (check > 0)
                 {
                     return true;
                 }
@@ -210,7 +210,7 @@ namespace FriendsWebApp.Data
                     check = cmd.ExecuteNonQuery();
                     _database.Close();
                 }
-                if (check < 0)
+                if (check > 0)
                 {
                     return true;
                 }
@@ -285,7 +285,7 @@ namespace FriendsWebApp.Data
             try
             {
                 List<Person> People = new List<Person>();
-                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName FROM People", _database);
+                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName, PersonId FROM People", _database);
                 cmd.CommandTimeout = 0;
 
                 _database.Open();
@@ -296,7 +296,8 @@ namespace FriendsWebApp.Data
                         People.Add(new Person()
                         {
                             Name = Convert.ToString(reader["Name"]),
-                            LastName = Convert.ToString(reader["LastName"])
+                            LastName = Convert.ToString(reader["LastName"]),
+                            PersonId = Convert.ToInt32(reader["PersonId"])
                         });
                     }
                     _database.Close();

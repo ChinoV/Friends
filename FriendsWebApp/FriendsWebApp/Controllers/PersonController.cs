@@ -68,6 +68,7 @@ namespace FriendsWebApp.Controllers
         }
 
         //get
+        [HttpDelete]
         public IActionResult Delete(int id)
         {
             try
@@ -94,7 +95,7 @@ namespace FriendsWebApp.Controllers
         //}
 
         //post
-        [HttpPost]
+        [HttpPut]
         public IActionResult Edit([FromBody]Person person)
         {
             try
