@@ -36,11 +36,11 @@
                             { "data": "lastName" },
                             {
                                 "defaultContent": "<div style =\"text-align:center;\">"
-                                    + "<button class='btn btn-info text-white' data-toggle='modal' data-target='#ModalPerson' title='Edit'  onclick = \"editRow(this)\"><i class='fa fa-edit'></i></button>  "
-                                    + "<button class='btn btn-danger text-white' data-toggle='modal' data-target='#DeleteModalPerson' onclick = \"removePerson(this)\" title='Delete'><i class='fa fa-trash'></i></button>  "
-                                    + "<button> Add friend</button>  "
-                                    + "<button> Remove friend</button>  "
                                     + "<button class=\"btn btn-warning text-white\" title=\"ShowFriends\"><i class=\"fa fa-eye\"></i></button>  "
+                                    + "<button class='btn btn-info text-white' data-toggle='modal' data-target='#ModalPerson' title='Edit'  onclick = \"editRow(this)\"><i class='fa fa-edit'></i></button>  "                            
+                                    + "<button  class='btn btn-success text-white'><i class='fa fa-user-plus'></i></button>  "
+                                    + "<button  class='btn btn-danger text-white'><i class='fa fa-user-times'></i></button>  "
+                                    + "<button class='btn btn-danger text-white' data-toggle='modal' data-target='#DeleteModalPerson' onclick = \"removePerson(this)\" title='Delete'><i class='fa fa-trash'></i></button>  "
                                 + "</div>"
                             }
                         ],
@@ -69,7 +69,7 @@
                 $("#BtnCreatePerson").css("display", "inline");
                 $("#BtnEditPerson").css("display", "none");
                 $("#UserId").css("display", "none");
-                $("#titleModel").text("Add new Row to table");
+                $("#titleModel").text("Create new Person");
             });
 
 
@@ -233,7 +233,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
 
-                    <h4 class="modal-title w-100  font-weight-bold" id="titleModel">Person</h4>
+                    <h4 class="modal-title w-100  font-weight-bold" id="titleModel">Create new Person</h4>
 
                 </div>
 
