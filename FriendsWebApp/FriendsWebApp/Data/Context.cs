@@ -5,11 +5,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace FriendsWebApp.Data
 {
-    public class Context: DbContext
+    public class Context : DbContext
     {
         private SqlConnection _database;
         public Context(DbContextOptions<Context> options)
@@ -222,7 +221,7 @@ namespace FriendsWebApp.Data
             }
         }
 
-        public List<Person> GetFriends (int id)
+        public List<Person> GetFriends(int id)
         {
             try
             {
@@ -257,7 +256,7 @@ namespace FriendsWebApp.Data
             try
             {
                 List<Person> People = new List<Person>();
-                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName,PersonId FROM [dbo].[GetNewFriends]", _database);
+                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName,PersonId FROM [dbo].[GetNewFriends](" + id + ")", _database);
                 cmd.CommandTimeout = 0;
 
                 _database.Open();
@@ -312,34 +311,52 @@ namespace FriendsWebApp.Data
             }
         }
 
-        public List<Person> GetGraph()
+        public List<JPerson> GetGraph(int id)
         {
-            try
-            {
-                List<Person> People = new List<Person>();
-                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName, PersonId FROM [dbo].[GetGraph]", _database);
-                cmd.CommandTimeout = 0;
 
-                _database.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
+            List<JPerson> People = new List<JPerson>();
+            SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Id1, Name1, Last1, Id2, Name2, Last2 FROM [dbo].[GetGraph](" + id + ")", _database);
+            cmd.CommandTimeout = 0;
+
+            _database.Open();
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    int Id1 = Convert.ToInt32(reader["Id1"]);
+                    if (!People.Any(s => s.Id == Id1))
                     {
-                        People.Add(new Person()
+                        People.Add(new JPerson()
                         {
-                            Name = Convert.ToString(reader["Name"]),
-                            LastName = Convert.ToString(reader["LastName"]),
-                            PersonId = Convert.ToInt32(reader["PersonId"])
+                            Id = Id1,
+                            Text = Convert.ToString(reader["Name1"]) + " " + Convert.ToString(reader["Last1"])
                         });
                     }
-                    _database.Close();
-                    return People;
+
+                    int Id2 = Convert.ToInt32(reader["Id2"]);
+                    if (!People.Any(s => s.Id == Id2))
+                    {
+                        People.Add(new JPerson()
+                        {
+                            Id = Id2,
+                            Text = Convert.ToString(reader["Name2"]) + " " + Convert.ToString(reader["Last2"])
+                        });
+                    }
+
+                    if (!People.FirstOrDefault(s=>s.Id == Id1).Neighbors.Any(s=>s==Id2))
+                    {
+                        People.FirstOrDefault(s => s.Id == Id1).Neighbors.Add(Id2);
+                    }
+
+                    if (!People.FirstOrDefault(s => s.Id == Id2).Neighbors.Any(s => s == Id1))
+                    {
+                        People.FirstOrDefault(s => s.Id == Id2).Neighbors.Add(Id1);
+                    }
                 }
+                _database.Close();
+                return People;
             }
-            catch (Exception)
-            {
-                throw;
-            }
+
         }
 
     }
