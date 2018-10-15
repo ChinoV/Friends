@@ -2,6 +2,7 @@
 using FriendsWebApp.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Text;
 
 namespace FriendsWebApp.Controllers
 {
@@ -42,6 +43,21 @@ namespace FriendsWebApp.Controllers
             return View();
         }
 
+        //get graph
+        public IActionResult Delete()
+        {
+            List<JPerson> PeopleList = _context.GetGraph(1);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < PeopleList.Count; i++)
+            {
+                //sb.Append("{ \"id\": ").Append(PeopleList[i].PersonId).Append(" \"text\": ")
+                //    .Append(PeopleList[i].Name)
+                //    .Append(", \"position\": { \"left\": \"248.859px\", \"top\": \"22px\" }, \"neighbors\": [ \"3, 2, 4\" ] },");
+            }
+            sb.Length--;
+            return Json(null);
+        }
+
         //get
         public IActionResult GetPeople()
         {
@@ -49,14 +65,14 @@ namespace FriendsWebApp.Controllers
             return Json(PeopleList);
         }
 
-        //get
+        [HttpPost]
         public IActionResult GetNoneFriends([FromBody]int personId)
         {
             IList<Person> PeopleList = _context.GetNoneFriends(personId);
             return Json(PeopleList);
         }
 
-        //get
+        [HttpPost]
         public IActionResult GetFriends([FromBody]int personId)
         {
             try
@@ -71,12 +87,12 @@ namespace FriendsWebApp.Controllers
            
         }
 
-        //get
-        public IActionResult RemoveFriendhip([FromBody]int personId, [FromBody]int personId2)
+        [HttpPost]
+        public IActionResult RemoveFriendhip([FromBody]DoubleParam personIds)
         {
             try
             {                
-                if (_context.RemoveFriendhip(personId, personId2))
+                if (_context.RemoveFriendhip(personIds.Id1, personIds.Id2))
                 {
                     return Json(new { success = true });
                 }
@@ -88,13 +104,24 @@ namespace FriendsWebApp.Controllers
             }            
         }
 
-        //get
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
+        [HttpPost]
+        public IActionResult LinkFriends([FromBody]DoubleParam personIds)
+        {
+            try
+            {
+                if (_context.LinkFriends(personIds.Id1, personIds.Id2))
+                {
+                    return Json(new { success = true });
+                }
+                return Json(new { success = false });
+            }
+            catch (System.Exception)
+            {
+                return Json(new { success = false });
+            }
+        }
 
-        //post
+        
         [HttpPost]
         public Person Create([FromBody]Person person)
         {
@@ -108,7 +135,7 @@ namespace FriendsWebApp.Controllers
 
         //get
         [HttpDelete]
-        public IActionResult Delete([FromBody]int personId)
+        public IActionResult sDelete([FromBody]int personId)
         {
             try
             {
@@ -125,15 +152,7 @@ namespace FriendsWebApp.Controllers
             }
         }
 
-        //get
-        //public IActionResult Edit(int Id)
-        //{
-        //    Person person = new Person();
-        //    person = _context.GetPerson(Id);
-        //    return View(Json(person));
-        //}
-
-        //post
+        
         [HttpPut]
         public IActionResult Edit([FromBody]Person person)
         {
