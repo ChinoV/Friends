@@ -50,6 +50,13 @@ namespace FriendsWebApp.Controllers
         }
 
         //get
+        public IActionResult GetNewFriends([FromBody]int personId)
+        {
+            IList<Person> PeopleList = _context.GetNoneFriends(personId);
+            return Json(PeopleList);
+        }
+
+        //get
         //public IActionResult Create()
         //{
         //    return View();
@@ -69,11 +76,11 @@ namespace FriendsWebApp.Controllers
 
         //get
         [HttpDelete]
-        public IActionResult Delete([FromBody]Person person)
+        public IActionResult Delete([FromBody]int personId)
         {
             try
             {
-                if (_context.RemovePerson(person.PersonId))
+                if (_context.RemovePerson(personId))
                 {
                     return Json(new { success = true });
                 }
