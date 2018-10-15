@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="~/css/StyleSheet.css" />
 
     <style>
-
     </style>
     <script>
         $(document).ready(function () {
@@ -42,12 +41,12 @@
                                 "defaultContent": "<div style =\"text-align:center;\">"
                                     + "<button class='btn btn-warning text-white' data-toggle='modal' data-target='#ModalPerson' title='Edit'  onclick = \"editRow(this)\"><i class='fa fa-edit'></i></button>  "
                                     + "<button class='btn btn-danger text-white' data-toggle='modal' data-target='#DeleteModalPerson' onclick = \"removePerson(this)\" title='Delete'><i class='fa fa-trash'></i></button>  "
-                                + "</div>"
+                                    + "</div>"
                             },
                             {
                                 "defaultContent": "<div style =\"text-align:center;\">"
                                     + "<button class=\"btn btn-primary text-white\" title=\"ShowFriends\"><i class=\"fa fa-eye\"></i></button>  "
-                                    + "<button  class='btn btn-success text-white'><i class='fa fa-user-plus'></i></button>  "
+                                    + "<button  id='btnAddFriend' class='btn btn-success text-white' data-toggle='modal' data-target='#ModalFriend' onclick = \"ChargeFriendSelect(this)\"><i class='fa fa-user-plus'></i></button>  "
                                     + "<button  class='btn btn-danger text-white' data-toggle='modal' data-target='#RemoveFriendModal' onclick = \"LoadRemoveFriend(this)\"><i class='fa fa-user-times'></i></button>  "
                                     + "</div>"
                             }
@@ -68,7 +67,7 @@
 
             });
 
-             //<!--clean Create Person -- >
+            //<!--clean Create Person -- >
             $("#ModalPerson").on('hidden.bs.modal', function () {
                 $("#HiddenIndexDelete").val("");
                 $(".modal-body #UserId").val("");
@@ -111,7 +110,6 @@
                 });
                 $("#closeDeleteModal").click();
             })
-
 
         });
 
@@ -172,37 +170,104 @@
 
         function EditPerson() {
 
-                $.ajaxSetup({ async: false });
-                $.ajax({
-                    type: "PUT",
-                    url: "/Person/Edit",
-                    data: JSON.stringify({
-                        personId: $("#UserId").val(),
-                        name: $("#formName").val(),
-                        lastName: $("#formLastName").val(),
-                    }),
-                    dataType: "json",
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (data) {
-                        if (data) {
+            $.ajaxSetup({ async: false });
+            $.ajax({
+                type: "PUT",
+                url: "/Person/Edit",
+                data: JSON.stringify({
+                    personId: $("#UserId").val(),
+                    name: $("#formName").val(),
+                    lastName: $("#formLastName").val(),
+                }),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data) {
 
-                            console.log(data);
-                            var obj = {
-                                personId: data.personId,
-                                name: data.name,
-                                lastName: data.lastName
+                        $.ajaxSetup({ async: false });
+                        $.ajax({
+                            type: "PUT",
+                            url: "/Person/Edit",
+                            data: JSON.stringify({
+                                personId: $("#UserId").val(),
+                                name: $("#formName").val(),
+                                lastName: $("#formLastName").val(),
+                            }),
+                            dataType: "json",
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (data) {
+                                if (data) {
+
+                                    console.log(data);
+                                    var obj = {
+                                        personId: data.personId,
+                                        name: data.name,
+                                        lastName: data.lastName
+                                    }
+                                    $table.row($("#indexId").val()).data(obj).draw();
+                                    $("#closeMyModal").click();
+                                }
+                                else {
+                                    //ValidateMyAlert("Class='alert alert-warning'", 'Something is wrong', 'Warning', "#alertContainer");
+                                }
+                            },
+                            error: function () {
+                                //ValidateMyAlert("Class='alert alert-danger'", 'Error whith edit', 'Danger', "#alertContainer");
                             }
-                            $table.row($("#indexId").val()).data(obj).draw();
-                            $("#closeMyModal").click();
-                        }
-                        else {
-                            //ValidateMyAlert("Class='alert alert-warning'", 'Something is wrong', 'Warning', "#alertContainer");
-                        }
-                    },
-                    error: function () {
-                        //ValidateMyAlert("Class='alert alert-danger'", 'Error whith edit', 'Danger', "#alertContainer");
+                        });
                     }
-                });
+                }
+            });
+        }
+
+
+        //<!--charge friend -- >
+        function ChargeFriendSelect(button) {
+
+            var ActualRow = $(button).parents("tr");
+            var rowIndex = $table.row(ActualRow).index();
+            var row = $table.row(rowIndex).data();
+            $("#ActualId").val(row.personId);
+            $.ajax({
+                type: "POST",
+                url: "/Person/GetNoneFriends",
+                data: JSON.stringify($("#ActualId").val(), 2),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+
+                    var listItems = '<option selected="selected" value="0">- Select -</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        listItems += "<option value='" + data[i].personId + "'>" + data[i].name + "</option>";
+                    }
+                    $("#listPeople").html(listItems);
+                },
+                error: function () {
+                    console.log("error, ajax couldn't charge the table");
+                }
+            });
+            $('#modalHeaderFriendTitle').html('Add New Friend');
+
+        }
+
+        //<!--add friend relationship-- >
+        function linkFriends() {
+            $.ajax({
+                type: "POST",
+                url: "/Person/LinkFriends",
+                data: JSON.stringify({
+                    Id1: $("#ActualId").val(),
+                    Id2: $("#listPeople option:selected").val()
+                }),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $("#CloseAddFriendModal").click();
+                },
+                error: function () {
+                    console.log("error, ajax couldn't charge the table");
+                }
+            });
         }
 
         function LoadRemoveFriend(button) {
@@ -231,11 +296,11 @@
 
         function RemoveFriend() {
 
-            console.log($("#RemoveFriendPersonId").val() + "  " + $("#FriendsSelect").val() )
+            console.log($("#RemoveFriendPersonId").val() + "  " + $("#FriendsSelect").val())
             $.ajax({
                 type: "POST",
                 url: "/Person/RemoveFriendhip",
-                data: JSON.stringify({ Id1: $("#RemoveFriendPersonId").val(), Id2:$("#FriendsSelect").val() }),
+                data: JSON.stringify({ Id1: $("#RemoveFriendPersonId").val(), Id2: $("#FriendsSelect").val() }),
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
@@ -249,7 +314,6 @@
                 }
             });
         }
-        
 
 
     </script>
@@ -366,6 +430,36 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" id="closeDeleteModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Add Friend Modal-->
+    <div>
+        <div id="frmAddFriend">
+            <input type="hidden" id="ActualId" name="Id" value="">
+            <div class="modal fade" id="ModalFriend" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div id="modalForm" class="modal-content">
+                        <div class="modal-header text-center">
+                            <button type="button" class="close" data-dismiss="modal" id="CloseAddFriendModal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title w-100 font-weight-bold" id="modalHeaderFriendTitle"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <h5>Select your friend</h5>
+                            <select id="listPeople" name="firstname">
+                                <option></option>
+                            </select>
+
+
+                            <div class="modal-footer d-flex justify-content-center">
+                                <button class="btn btn-unique" onclick="linkFriends()">Send <i class="fa fa-paper-plane-o ml-1"></i></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
