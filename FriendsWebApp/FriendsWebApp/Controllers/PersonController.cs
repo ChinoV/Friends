@@ -68,21 +68,22 @@ namespace FriendsWebApp.Controllers
         }
 
         //get
-        public IActionResult Delete(int id)
+        [HttpDelete]
+        public IActionResult Delete([FromBody]Person person)
         {
             try
             {
-                if (_context.RemovePerson(id))
+                if (_context.RemovePerson(person.PersonId))
                 {
                     return Json(new { success = true });
                 }
-                
+
                 return Json(new { success = false });
             }
             catch (System.Exception)
             {
                 return Json(new { success = false });
-            }             
+            }
         }
 
         //get
@@ -94,7 +95,7 @@ namespace FriendsWebApp.Controllers
         //}
 
         //post
-        [HttpPost]
+        [HttpPut]
         public IActionResult Edit([FromBody]Person person)
         {
             try
