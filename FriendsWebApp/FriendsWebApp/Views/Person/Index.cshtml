@@ -48,7 +48,7 @@
                                 "defaultContent": "<div style =\"text-align:center;\">"
                                     + "<button class=\"btn btn-primary text-white\" title=\"ShowFriends\"><i class=\"fa fa-eye\"></i></button>  "
                                     + "<button  class='btn btn-success text-white'><i class='fa fa-user-plus'></i></button>  "
-                                    + "<button  class='btn btn-danger text-white' data-toggle='modal' data-target='#RemoveFriendModal'><i class='fa fa-user-times'></i></button>  "
+                                    + "<button  class='btn btn-danger text-white' data-toggle='modal' data-target='#RemoveFriendModal' onclick = \"LoadRemoveFriend(this)\"><i class='fa fa-user-times'></i></button>  "
                                     + "</div>"
                             }
                         ],
@@ -80,6 +80,12 @@
                 $("#titleModel").text("Create new Person");
             });
 
+            //<!--clean Remove Friend -- >
+            $("#RemoveFriendModal").on('hidden.bs.modal', function () {
+                $("#RemoveFriendPersonId").val("");
+                $("#FriendsSelect").children('option:not(:first)').remove();
+            });
+
 
             //<!--Delete Person -- >
             $("#yesDelete").click(function () {
@@ -106,22 +112,6 @@
                 $("#closeDeleteModal").click();
             })
 
-            //<!--Chargin select remove person -- >
-            $("#RemoveFriendModal").on('show.bs.modal', function () {
-                $.ajax({
-                    type: "GET",
-                    url: "/Person/RemoveFriendhip",
-                    data: JSON.stringify(),
-                    dataType: "json",
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (data) {
-
-
-                    },
-                    error: function () {
-                        Console.log("error, ajax couldn't charge the table")
-                    }
-            });
 
         });
 
@@ -215,7 +205,49 @@
                 });
         }
 
+        function LoadRemoveFriend(button) {
 
+            var actualRow = $(button).parents("tr");
+            var rowIndex = $table.row(actualRow).index();
+            var row = $table.row(rowIndex).data();
+            $("#RemoveFriendPersonId").val(row.personId);
+
+            $.ajax({
+                type: "POST",
+                url: "/Person/GetFriends",
+                data: JSON.stringify($("#RemoveFriendPersonId").val()),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $.each(data, function () {
+                        $("#FriendsSelect").append("<option value=" + this.personId + ">" + this.name + "</option>");
+                    });
+                },
+                error: function () {
+                    Console.log("error, ajax couldn't charge the select for the remove friend")
+                }
+            });
+        }
+
+        function RemoveFriend() {
+
+            $.ajax({
+                type: "POST",
+                url: "/Person/RemoveFriendhip",
+                data: JSON.stringify($("#RemoveFriendPersonId").val(), $("#FriendsSelect").val()),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data) {
+                        console.log("success remove friend")
+                    }
+                },
+                error: function () {
+                    console.log("error, ajax couldn't remove a friend")
+                }
+            });
+        }
+        
 
 
     </script>
@@ -300,7 +332,7 @@
                 </div>
 
                 <div class="modal-body mx-3">
-                    <input id="UserId" name="RemoveFriendPersonId" type="hidden" value="0">
+                    <input id="RemoveFriendPersonId" type="hidden" value="0">
                     <div class="md-form mb-5">
                         <i class="fa fa-users"></i>
                         <select id="FriendsSelect" class="form-control">
