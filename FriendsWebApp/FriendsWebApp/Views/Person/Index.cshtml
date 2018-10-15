@@ -20,7 +20,7 @@
             //<!--Chargin DataTables   -- >
             $.ajax({
                 type: "GET",
-                url: "http://localhost:61293//Person//GetPeople",
+                url: "/Person/GetPeople",
                 data: "",
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
@@ -66,7 +66,7 @@
         function CreatePerson() {
             $.ajax({
                 type: "POST",
-                url: "http://localhost:61293//Person//Create",
+                url: "/Person/Create",
                 data: JSON.stringify({
                     Name: $("#formName").val(),
                     LastName: $("#formLastName").val()
@@ -76,9 +76,9 @@
                 success: function (data) {
                     if (data) {
                         var obj = {
-                            Id: data.Id,
+                            PersonId: data.PersonId,
                             Name: data.Name,
-                            Description: data.Description
+                            LastName: data.LastName
                         };
                         $table.row.add(obj).draw();
                         $("#closeMyModal").click();
@@ -86,7 +86,7 @@
                     else { ValidateMyAlert("Class='alert alert-warning'", 'Could not be added', 'Warning', "#alertContainer"); }
                 },
                 error: function () {
-                    Console.log("error, ajax couldn't Create a person")
+                    console.log("error, ajax couldn't Create a person")
                 }
             });
         }
