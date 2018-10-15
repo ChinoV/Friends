@@ -22,7 +22,49 @@ namespace FriendsWebApp.Data
         {
             try
             {
-                return null;
+                Person person = new Person();
+                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName, PersonId FROM [dbo].[GetFriends] WHERE Id = " + id, _database);
+                cmd.CommandTimeout = 0;
+
+                _database.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        person.Name = Convert.ToString(reader["Name"]);
+                        person.LastName = Convert.ToString(reader["LastName"]);
+                        person.PersonId = Convert.ToInt32(reader["PersonId"]);
+                    }
+                    _database.Close();
+                    return person;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public Person GetLastPersonInsert()
+        {
+            try
+            {
+                Person person = new Person();
+                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT PersonId, Name, LastName FROM People ORDER BY PersonId DESC", _database);
+                cmd.CommandTimeout = 0;
+
+                _database.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        person.Name = Convert.ToString(reader["Name"]);
+                        person.LastName = Convert.ToString(reader["LastName"]);
+                        person.PersonId = Convert.ToInt32(reader["PersonId"]);
+                    }
+                    _database.Close();
+                    return person;
+                }
             }
             catch (Exception)
             {
@@ -88,7 +130,7 @@ namespace FriendsWebApp.Data
             }
         }
 
-        public bool EditPerson(Person person, int id)
+        public bool EditPerson(Person person)
         {
             try
             {
@@ -103,7 +145,7 @@ namespace FriendsWebApp.Data
                                         ,@PersonId";
                     cmd.Parameters.Add("Name", SqlDbType.NVarChar).Value = person.Name;
                     cmd.Parameters.Add("LastName", SqlDbType.NVarChar).Value = person.LastName;
-                    cmd.Parameters.Add("PersonId", SqlDbType.Int).Value = id;
+                    cmd.Parameters.Add("PersonId", SqlDbType.Int).Value = person.PersonId;
                     _database.Open();
                     check = cmd.ExecuteNonQuery();
                     _database.Close();

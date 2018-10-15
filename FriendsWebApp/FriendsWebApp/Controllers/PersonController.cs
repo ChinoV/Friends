@@ -42,6 +42,7 @@ namespace FriendsWebApp.Controllers
             return View();
         }
 
+        //get
         public IActionResult GetPeople()
         {
             IList<Person> PeopleList = _context.GetPeople();
@@ -49,21 +50,66 @@ namespace FriendsWebApp.Controllers
         }
 
         //get
-        public IActionResult Create()
-        {
-            return Json(null);
-        }
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
 
         //post
         [HttpPost]
-        public IActionResult Create([FromBody]Person person)
+        public Person Create([FromBody]Person person)
         {
-
             if (_context.AddPerson(person))
             {
-                return Json(new { success = true });
+                person = _context.GetLastPersonInsert();
+                return person;
             }
-            return Json(new { success = false });
+            return null;
+        }
+
+        //get
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                if (_context.RemovePerson(id))
+                {
+                    return Json(new { success = true });
+                }
+                
+                return Json(new { success = false });
+            }
+            catch (System.Exception)
+            {
+                return Json(new { success = false });
+            }             
+        }
+
+        //get
+        //public IActionResult Edit(int Id)
+        //{
+        //    Person person = new Person();
+        //    person = _context.GetPerson(Id);
+        //    return View(Json(person));
+        //}
+
+        //post
+        [HttpPost]
+        public IActionResult Edit([FromBody]Person person)
+        {
+            try
+            {
+                if (_context.EditPerson(person))
+                {
+                    return Json(person);
+                }
+                return Json(new { success = false });
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+            
         }
     }
 }
