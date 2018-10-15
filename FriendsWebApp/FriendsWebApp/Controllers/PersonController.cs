@@ -44,15 +44,15 @@ namespace FriendsWebApp.Controllers
         }
 
         //get graph
-        public IActionResult Delete()
+        public IActionResult GetGraph()
         {
             List<JPerson> PeopleList = _context.GetGraph(1);
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < PeopleList.Count; i++)
             {
-                //sb.Append("{ \"id\": ").Append(PeopleList[i].PersonId).Append(" \"text\": ")
-                //    .Append(PeopleList[i].Name)
-                //    .Append(", \"position\": { \"left\": \"248.859px\", \"top\": \"22px\" }, \"neighbors\": [ \"3, 2, 4\" ] },");
+                sb.Append("{ \"id\": ").Append(PeopleList[i].Id).Append(" \"text\": ")
+                    .Append(PeopleList[i].Text)
+                    .Append(", \"position\": { \"left\": \"248.859px\", \"top\": \"22px\" }, \"neighbors\": [ \"3, 2, 4\" ] },");
             }
             sb.Length--;
             return Json(null);
@@ -88,11 +88,11 @@ namespace FriendsWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoveFriendhip([FromBody]DoubleParam personIds)
+        public IActionResult RemoveFriendship([FromBody]DoubleParam personIds)
         {
             try
             {                
-                if (_context.RemoveFriendhip(personIds.Id1, personIds.Id2))
+                if (_context.RemoveFriendship(personIds.Id1, personIds.Id2))
                 {
                     return Json(new { success = true });
                 }
@@ -135,7 +135,7 @@ namespace FriendsWebApp.Controllers
 
         //get
         [HttpDelete]
-        public IActionResult sDelete([FromBody]int personId)
+        public IActionResult Delete([FromBody]int personId)
         {
             try
             {
