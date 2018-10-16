@@ -13,8 +13,6 @@ namespace FriendsWebApp.Data.Entities
 
         public string Text { get; set; }
 
-        public string LastName { get; set; }
-
         public string Left { get; set; }
 
         public string Top { get; set; }
