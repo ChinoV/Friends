@@ -52,8 +52,8 @@ namespace FriendsWebApp.Controllers
         public IActionResult GetGraph([FromBody]int personId)
         {
             List<JPerson> PeopleList = _context.GetGraph(personId);
-            StringBuilder jsonStringBuilder = new StringBuilder();
 
+            int Top = 22;
             for (int i = 0; i < PeopleList.Count; i++)
             {
                 StringBuilder neighbors = new StringBuilder();
@@ -61,13 +61,33 @@ namespace FriendsWebApp.Controllers
                 {
                     neighbors.Append(s).Append(",");
                 }
+
+                if (i == 0)
+                {
+                    PeopleList[i].Left = "248.859px";
+                }
+                else if (i % 2 != 0)
+                {
+                    Top += 126;
+                    PeopleList[i].Left = "80.8594px";
+                }
+                else
+                {
+                    PeopleList[i].Left = "416.859px";
+                }
+                PeopleList[i].Top = Top + "px";
+
+
                 neighbors.Length--;
-                jsonStringBuilder.Append("{ \"id\": ").Append(PeopleList[i].Id).Append(", \"text\": ")
-                    .Append(PeopleList[i].Text)
-                    .Append(", \"position\": { \"left\": \"248.859px\", \"top\": \"22px\" }, \"neighbors\": [ \"").Append(neighbors).Append("\" ] },");
             }
-            jsonStringBuilder.Length--;
-            return Json(jsonStringBuilder);
+
+            JPerson[] jPeople = new JPerson[PeopleList.Count];
+            for (int i = 0; i < PeopleList.Count; i++)
+            {
+                jPeople[i] = PeopleList[i];
+            }
+
+            return Json(PeopleList);
         }
 
         //get
