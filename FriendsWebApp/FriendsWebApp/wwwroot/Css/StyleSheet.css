@@ -8,3 +8,7 @@
     left: 2%;
     width: 96%;
 }
+
+.Error {
+    border: solid 1px red;
+}
