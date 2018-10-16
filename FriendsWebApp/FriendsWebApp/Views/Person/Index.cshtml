@@ -99,15 +99,15 @@
 
                         if (data) {
                             $table.row($("#indexId").val()).remove().draw();           
-                            ValidateMyAlert("Class='alert alert-warning'", 'the person with the id ' + $("#HiddenIndexDelete").val() + ' was Deleted', '', "#alertContainer");
+                            ValidateMyAlert("alert-success'", 'the person with the id ' + $("#HiddenIndexDelete").val() + ' was Deleted', "#alertContainer");
                             
                         }
                         else {
-                            ValidateMyAlert("Class='alert alert-warning'", ' Could not delete ', 'Warning', "#alertContainer");
+                            ValidateMyAlert("alert-warning'", ' Could not delete ', "#alertContainer");
                         }
                     },
                     error: function () {
-                        //ValidateMyAlert("Class='alert alert-danger'", 'error', 'Danger', "#alertContainer");
+                        ValidateMyAlert("alert-danger'", 'error', 'Danger', "#alertContainer");
                     }
                 });
                 $("#closeDeleteModal").click();
@@ -136,9 +136,9 @@
                         console.log(obj.personId);
                         $table.row.add(obj).draw();
                         $("#closeMyModal").click();
-                        ValidateMyAlert("Class='alert alert-success'", 'the person was added', 'success', "#alertContainer");
+                        ValidateMyAlert("alert-success", 'the person was added', "#alertContainer");
                     }
-                    else { ValidateMyAlert("Class='alert alert-warning'", 'Could not be added', 'Warning', "#alertContainer"); }
+                    else { ValidateMyAlert("alert-warning'", 'Could not be added', "#alertContainer"); }
                 },
                 error: function () {
                     console.log("error, ajax couldn't Create a person")
@@ -266,6 +266,7 @@
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
                     $("#CloseAddFriendModal").click();
+                    ValidateMyAlert("alert-success'", 'the person with the id ' + $("#ActualId").val() +  ' was linked', "#alertContainer");
                 },
                 error: function () {
                     console.log("error, ajax couldn't charge the table");
@@ -310,6 +311,7 @@
                     if (data) {
                         console.log("success remove friend")
                         $("#closeMyModalRemove").click();
+                        ValidateMyAlert("alert-success'", 'the person with the id ' + $("#RemoveFriendPersonId").val() + ' was unlinked', "#alertContainer");
                     }
                 },
                 error: function () {
@@ -320,20 +322,26 @@
 
 
         //Validations
-        function ValidateMyAlert(pClass, pString, tMessege, insertSide) {
+        function ValidateMyAlert(pClass, pString, insertSide) {
 
-            $("#alertContainer p").remove();
-                $(insertSide).prepend("<p " + pClass + "><strong>" + tMessege + "</strong> " + pString + " </p>");
+            $("#alertContainer div").remove();
+            $(insertSide).prepend("<div myAlert-top class='myAlert-top alert " + pClass + " alert-dismissible show' role='alert'> <strong>" + pString + "</strong >"
+                + " <a href='#' class= 'close' data-dismiss='alert' aria-label='Close' >&times;</a >"
+                + "</div >");
+
+            setTimeout(function () {
+                $(".myAlert-top").alert('close');
+            }, 2000);
         }
 
     </script>
 </head>
 <body>
     <div class="container">
+        
         <br>
 
         <h2 class="text-center">People List</h2>
-        <br />
         <div id="alertContainer"> </div>
         <br />
         <a class="btn btn-primary" data-toggle="modal" data-target="#ModalPerson"><strong>Nuevo</strong> <i class="fa fa-plus"></i></a>
