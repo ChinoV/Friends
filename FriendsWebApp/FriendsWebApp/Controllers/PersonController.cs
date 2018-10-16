@@ -81,6 +81,7 @@ namespace FriendsWebApp.Controllers
                 neighbors.Length--;
             }
 
+
             JPerson[] jPeople = new JPerson[PeopleList.Count];
             for (int i = 0; i < PeopleList.Count; i++)
             {
@@ -88,6 +89,47 @@ namespace FriendsWebApp.Controllers
             }
 
             return Json(PeopleList);
+        }
+
+        [HttpPost]
+        public IActionResult GetNewGraph([FromBody]int personId, List<JPerson> jPeople)
+        {
+            List<JPerson> PeopleList = _context.GetGraph(personId);
+
+            var LastPerson = jPeople[jPeople.Count - 1];
+            int Top = int.Parse(LastPerson.Top.Replace("px", "")) + 126;
+            string LastLeft = LastPerson.Left;
+
+            var FriendsToAdd = new List<JPerson>();
+
+            for (int i = 0; i < PeopleList.Count; i++)
+            {
+                if (!jPeople.Exists(x => x.Id == PeopleList[i].Id))
+                {
+                    jPeople.Add(PeopleList[i]);
+                    var Last = jPeople[FriendsToAdd.Count - 1];
+                    if (LastLeft.Equals("248.859px") || LastLeft.Equals("416.859px"))
+                    {
+                        Top += 126;
+                        Last.Left = "80.8594px";
+                        LastLeft = "80.8594px";
+                    }
+                    else
+                    {
+                        Last.Left = "416.859px";
+                    }
+                    Last.Top += "px";
+                    for (int j = 0; j < Last.Neighbors.Count - 1; j++)
+                    {
+                        var Neighbor = jPeople.Find(x => x.Id == Last.Neighbors[i]);
+                        if (!Neighbor.Neighbors.Exists(x => x.Equals(Last.Id)))
+                        {
+                            Neighbor.Neighbors.Add(Last.Id);
+                        }
+                    }
+                }
+            }
+            return Json(FriendsToAdd);
         }
 
         //get
