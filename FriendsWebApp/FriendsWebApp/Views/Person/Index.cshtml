@@ -45,7 +45,7 @@
                             },
                             {
                                 "defaultContent": "<div style =\"text-align:center;\">"
-                                    + "<button class=\"btn btn-primary text-white\" title=\"ShowFriends\"><i class=\"fa fa-eye\"></i></button>  "
+                                    + "<button class=\"btn btn-primary text-white\" title=\"ShowFriends\"  onclick = \"ShowFriends(this)\"><i class=\"fa fa-eye\"></i></button>  "
                                     + "<button  id='btnAddFriend' class='btn btn-success text-white' data-toggle='modal' data-target='#ModalFriend' onclick = \"ChargeFriendSelect(this)\"><i class='fa fa-user-plus'></i></button>  "
                                     + "<button  class='btn btn-danger text-white' data-toggle='modal' data-target='#RemoveFriendModal' onclick = \"LoadRemoveFriend(this)\"><i class='fa fa-user-times'></i></button>  "
                                     + "</div>"
@@ -114,6 +114,15 @@
             })
 
         });
+
+        function ShowFriends(button) {
+            var actualRow = $(button).parents("tr");
+            var rowIndex = $table.row(actualRow).index();
+            var row = $table.row(rowIndex).data();
+
+
+            window.location.replace('http://' + window.location.host+'/Person/RelationGraph?personId=' + row.personId);
+        }
 
         function CreatePerson() {
             $.ajax({
