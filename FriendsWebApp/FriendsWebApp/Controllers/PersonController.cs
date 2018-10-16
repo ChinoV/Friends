@@ -43,19 +43,26 @@ namespace FriendsWebApp.Controllers
             return View();
         }
 
-        //get graph
-        public IActionResult GetGraph()
+        [HttpPost]
+        public IActionResult GetGraph([FromBody]int personId)
         {
-            List<JPerson> PeopleList = _context.GetGraph(1);
-            StringBuilder sb = new StringBuilder();
+            List<JPerson> PeopleList = _context.GetGraph(personId);
+            StringBuilder jsonStringBuilder = new StringBuilder();
+
             for (int i = 0; i < PeopleList.Count; i++)
             {
-                sb.Append("{ \"id\": ").Append(PeopleList[i].Id).Append(" \"text\": ")
+                StringBuilder neighbors = new StringBuilder();
+                foreach (var s in PeopleList[i].Neighbors)
+                {
+                    neighbors.Append(s).Append(",");
+                }
+                neighbors.Length--;
+                jsonStringBuilder.Append("{ \"id\": ").Append(PeopleList[i].Id).Append(" \"text\": ")
                     .Append(PeopleList[i].Text)
-                    .Append(", \"position\": { \"left\": \"248.859px\", \"top\": \"22px\" }, \"neighbors\": [ \"3, 2, 4\" ] },");
+                    .Append(", \"position\": { \"left\": \"248.859px\", \"top\": \"22px\" }, \"neighbors\": [ \"").Append(neighbors).Append("\" ] },");
             }
-            sb.Length--;
-            return Json(null);
+            jsonStringBuilder.Length--;
+            return Json(jsonStringBuilder);
         }
 
         //get
@@ -152,7 +159,6 @@ namespace FriendsWebApp.Controllers
             }
         }
 
-        
         [HttpPut]
         public IActionResult Edit([FromBody]Person person)
         {
