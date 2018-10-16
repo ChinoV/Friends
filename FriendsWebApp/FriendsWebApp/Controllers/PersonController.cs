@@ -62,7 +62,7 @@ namespace FriendsWebApp.Controllers
                     neighbors.Append(s).Append(",");
                 }
                 neighbors.Length--;
-                jsonStringBuilder.Append("{ \"id\": ").Append(PeopleList[i].Id).Append(" \"text\": ")
+                jsonStringBuilder.Append("{ \"id\": ").Append(PeopleList[i].Id).Append(", \"text\": ")
                     .Append(PeopleList[i].Text)
                     .Append(", \"position\": { \"left\": \"248.859px\", \"top\": \"22px\" }, \"neighbors\": [ \"").Append(neighbors).Append("\" ] },");
             }
