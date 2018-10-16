@@ -27,50 +27,22 @@
                 success: function (data) {
                     if (data) {
                         console.log(data);
-
-                        argGraph.importJson(JSON.stringify([
-                            {
-                                "id": "1",
-                                "text": "Ricardo Gamboa",
+                        var dataArray = [];
+                        for (var i = 0; i < data.length; i++) {
+                            dataArray.push({
+                                "id": data[i].id,
+                                "text": data[i].text,
                                 "position": {
-                                    "left": "248.859px",
-                                    "top": "22px"
+                                    "left": data[i].left,
+                                    "top": data[i].top
                                 },
-                                "neighbors": [
-                                    "3,2,4"
-                                ]
-                            },
-                            {
-                                "id": "2",
-                                "text": "Lung Chang",
-                                "position": {
-                                    "left": "416.859px",
-                                    "top": "148px"
-                                },
-                                "neighbors": [
-                                    "3,1"
-                                ]
-                            },
-                            {
-                                "id": "3",
-                                "text": "Alfredo Valverde",
-                                "position": {
-                                    "left": "80.8594px",
-                                    "top": "139px"
-                                },
-                                "neighbors": ["4,1,2"]
-                            },
-                            {
-                                "id": "4",
-                                "text": "Armando Ramirez",
-                                "position": {
-                                    "left": "169.859px",
-                                    "top": "247px"
-                                },
-                                "neighbors": ["1,3"]
-                            }
-                        ]));
+                                "neighbors": data[i].neighbors
+                            });
+                        }
+                        console.log(dataArray);
+                        argGraph.importJson(JSON.stringify(dataArray));
                     }
+                    $("span").remove();
                 },
                 error: function () {
                     console.log("error, ajax couldn't  make the tree")
