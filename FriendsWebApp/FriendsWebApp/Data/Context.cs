@@ -14,7 +14,7 @@ namespace FriendsWebApp.Data
         public Context(DbContextOptions<Context> options)
        : base(options)
         {
-            _database = new SqlConnection("Data Source=;Initial Catalog=FriendsDB;Integrated Security=True");
+            _database = new SqlConnection("Data Source=.;Initial Catalog=FriendsDB;Integrated Security=True");
             //_database = new SqlConnection("Data Source=ricardodbs.database.windows.net;Initial Catalog=FriendsDB;User ID=Ricardo;Password=$R1c4rdo$");
         }
 
