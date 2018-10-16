@@ -23,6 +23,10 @@ namespace FriendsWebApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddDbContext<Context>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("DefaultConnection")));
+
             var connection = @"Data Source=.;Initial Catalog=FriendsDB;Integrated Security=True";
             services.AddDbContext<Context>(options => options.UseSqlServer(connection));
             services.AddMvc();

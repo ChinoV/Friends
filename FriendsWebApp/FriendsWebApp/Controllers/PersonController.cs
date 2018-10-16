@@ -43,6 +43,11 @@ namespace FriendsWebApp.Controllers
             return View();
         }
 
+        public IActionResult RelationGraph()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult GetGraph([FromBody]int personId)
         {
