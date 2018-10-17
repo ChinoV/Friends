@@ -1,411 +1,400 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>List</title>
-    <!--jQuery-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <!--Data Table-->
-    <script type="text/javascript" src=" https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src=" https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="~/css/StyleSheet.css" />
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-    <style>
-    </style>
-    <script>
-        $(document).ready(function () {
+@section scripts{
+<script>
+    $(document).ready(function () {
 
 
-            //<!--Chargin DataTables   -- >
-            $.ajax({
-                type: "GET",
-                url: "/Person/GetPeople",
-                data: "",
-                dataType: "json",
-                contentType: 'application/json; charset=utf-8',
-                success: function (data) {
-                    //<!--DataTables  Initialization -- >
-                    $table = $('#PeopleTable').DataTable({
-                        responsive: true,
-                        "order": [[1, "asc"]],
-                        "data": data,
-                        "columns": [
-                            { "data": "personId" },
-                            { "data": "name" },
-                            { "data": "lastName" },
-                            {
-                                "defaultContent": "<div style =\"text-align:center;\">"
-                                    + "<button class='btn btn-warning text-white' data-toggle='modal' data-target='#ModalPerson' title='Edit'  onclick = \"editRow(this)\"><i class='fa fa-edit'></i></button>  "
-                                    + "<button class='btn btn-danger text-white' data-toggle='modal' data-target='#DeleteModalPerson' onclick = \"removePerson(this)\" title='Delete'><i class='fa fa-trash'></i></button>  "
-                                    + "</div>"
-                            },
-                            {
-                                "defaultContent": "<div style =\"text-align:center;\">"
-                                    + "<button class=\"btn btn-primary text-white\" title=\"ShowFriends\"  onclick = \"ShowFriends(this)\"><i class=\"fa fa-eye\"></i></button>  "
-                                    + "<button  id='btnAddFriend' class='btn btn-success text-white' data-toggle='modal' data-target='#ModalFriend' onclick = \"ChargeFriendSelect(this)\"><i class='fa fa-user-plus'></i></button>  "
-                                    + "<button  class='btn btn-danger text-white' data-toggle='modal' data-target='#RemoveFriendModal' onclick = \"LoadRemoveFriend(this)\"><i class='fa fa-user-times'></i></button>  "
-                                    + "</div>"
-                            }
-                        ],
-                        "columnDefs": [
-                            {
-                                "targets": [0],
-                                "visible": false,
-                                "searchable": false
-                            }
-                        ]
-                    });
-
-                },
-                error: function () {
-                    Console.log("error, ajax couldn't charge the table")
-                }
-
-            });
-
-            //<!--clean Create Person -- >
-            $("#ModalPerson").on('hidden.bs.modal', function () {
-                $("#HiddenIndexDelete").val("");
-                $(".modal-body #UserId").val("");
-                $(".modal-body #formName").val("");
-                $(".modal-body #formLastName").val("");
-                $("#BtnCreatePerson").css("display", "inline");
-                $("#BtnEditPerson").css("display", "none");
-                $("#UserId").css("display", "none");
-                $("#titleModel").text("Create new Person");
-            });
-
-            //<!--clean Remove Friend -- >
-            $("#RemoveFriendModal").on('hidden.bs.modal', function () {
-                $("#RemoveFriendPersonId").val("");
-                $("#FriendsSelect").children('option:not(:first)').remove();
-                $("#FriendsSelect").removeClass("Error");
-            });
-
-            //<!--clean Add Friend -- >
-            $("#ModalFriend").on('hidden.bs.modal', function () {
-                $("#listPeople").removeClass("Error");
-            });
-
-            //<!--Delete Person -- >
-            $("#yesDelete").click(function () {
-
-                $.ajax({
-                    type: "DELETE",
-                    url: "/Person/Delete",
-                    data: JSON.stringify($("#HiddenIndexDelete").val()),
-                    dataType: "json",
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (data) {
-
-                        if (data) {
-                            $table.row($("#indexId").val()).remove().draw();
-                            ValidateMyAlert("alert-success'", 'the person with the id ' + $("#HiddenIndexDelete").val() + ' was Deleted', "#alertContainer");
-
+        //<!--Chargin DataTables   -- >
+        $.ajax({
+            type: "GET",
+            url: "/Person/GetPeople",
+            data: "",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                //<!--DataTables  Initialization -- >
+                $table = $('#PeopleTable').DataTable({
+                    responsive: true,
+                    "order": [[1, "asc"]],
+                    "data": data,
+                    "columns": [
+                        { "data": "personId" },
+                        { "data": "name" },
+                        { "data": "lastName" },
+                        {
+                            "defaultContent": "<div style =\"text-align:center;\">"
+                                + "<button class='btn btn-warning text-white' data-toggle='modal' data-target='#ModalPerson' title='Edit'  onclick = \"editRow(this)\"><i class='fa fa-edit'></i></button>  "
+                                + "<button class='btn btn-danger text-white' data-toggle='modal' data-target='#DeleteModalPerson' onclick = \"removePerson(this)\" title='Delete'><i class='fa fa-trash'></i></button>  "
+                                + "</div>"
+                        },
+                        {
+                            "defaultContent": "<div style =\"text-align:center;\">"
+                                + "<button class=\"btn btn-primary text-white\" title=\"ShowFriends\"  onclick = \"ShowFriends(this)\"><i class=\"fa fa-eye\"></i></button>  "
+                                + "<button  id='btnAddFriend' class='btn btn-success text-white' data-toggle='modal' data-target='#ModalFriend' onclick = \"ChargeFriendSelect(this)\"><i class='fa fa-user-plus'></i></button>  "
+                                + "<button  class='btn btn-danger text-white' data-toggle='modal' data-target='#RemoveFriendModal' onclick = \"LoadRemoveFriend(this)\"><i class='fa fa-user-times'></i></button>  "
+                                + "</div>"
                         }
-                        else {
-                            ValidateMyAlert("alert-warning'", ' Could not delete ', "#alertContainer");
+                    ],
+                    "columnDefs": [
+                        {
+                            "targets": [0],
+                            "visible": false,
+                            "searchable": false
                         }
-                    },
-                    error: function () {
-                        ValidateMyAlert("alert-danger'", 'error', 'Danger', "#alertContainer");
-                    }
+                    ]
                 });
-                $("#closeDeleteModal").click();
-            })
+
+            },
+            error: function () {
+                Console.log("error, ajax couldn't charge the table")
+            }
 
         });
 
-        function ShowFriends(button) {
-            var actualRow = $(button).parents("tr");
-            var rowIndex = $table.row(actualRow).index();
-            var row = $table.row(rowIndex).data();
+        //<!--clean Create Person -- >
+        $("#ModalPerson").on('hidden.bs.modal', function () {
+            $("#HiddenIndexDelete").val("");
+            $(".modal-body #UserId").val("");
+            $(".modal-body #formName").val("");
+            $(".modal-body #formLastName").val("");
+            $("#BtnCreatePerson").css("display", "inline");
+            $("#BtnEditPerson").css("display", "none");
+            $("#UserId").css("display", "none");
+            $("#titleModel").text("Create new Person");
+        });
 
+        //<!--clean Remove Friend -- >
+        $("#RemoveFriendModal").on('hidden.bs.modal', function () {
+            $("#RemoveFriendPersonId").val("");
+            $("#FriendsSelect").children('option:not(:first)').remove();
+            $("#FriendsSelect").removeClass("Error");
+        });
 
-            window.location.replace('http://' + window.location.host + '/Person/RelationGraph?personId=' + row.personId);
-        }
+        //<!--clean Add Friend -- >
+        $("#ModalFriend").on('hidden.bs.modal', function () {
+            $("#listPeople").removeClass("Error");
+        });
 
-        function CreatePerson() {
-            $("#formName").removeClass("Error");
-            $("#formName").addClass("Validate");
-            $("#formLastName").removeClass("Error");
-            $("#formLastName").addClass("Validate");
-            if (ValidateInputs($("#formName").val(), $("#formLastName").val())) {
-                $.ajax({
-                    type: "POST",
-                    url: "/Person/Create",
-                    data: JSON.stringify({
-                        Name: $("#formName").val(),
-                        LastName: $("#formLastName").val()
-                    }),
-                    dataType: "json",
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (data) {
-                        if (data) {
-                            console.log(data)
-                            var obj = {
-                                personId: data.personId,
-                                name: data.name,
-                                lastName: data.lastName
-                            };
-                            console.log(obj.personId);
-                            $table.row.add(obj).draw();
-                            $("#closeMyModal").click();
-                            ValidateMyAlert("Class='alert alert-success'", 'the person was added', 'success', "#alertContainer");
-                        }
-                        else { ValidateMyAlert("Class='alert alert-warning'", 'Could not be added', 'Warning', "#alertContainer"); }
-                    },
-                    error: function () {
-                        console.log("error, ajax couldn't Create a person")
-                    }
-                });
-            }
-        }
+        //<!--Delete Person -- >
+        $("#yesDelete").click(function () {
 
-
-        function removePerson(button) {
-            var actualRow = $(button).parents("tr");
-            var rowIndex = $table.row(actualRow).index();
-            var row = $table.row(rowIndex).data();
-            $("#HiddenIndexDelete").val(row.personId);
-            $("#indexId").val(rowIndex);
-        }
-
-        function editRow(button) {
-
-            $("#BtnCreatePerson").css("display", "none");
-            $("#BtnEditPerson").css("display", "inline");
-            $("#UserId").css("display", "inline");
-            $("#titleModel").text("Edit Person");
-            var ActualRow = $(button).parents("tr");
-            var rowIndex = $table.row(ActualRow).index();
-            var row = $table.row(rowIndex).data();
-            $("#UserId").val(row.personId);
-            $("#formName").val(row.name);
-            $("#formLastName").val(row.lastName);
-            $("#indexId").val(rowIndex);
-
-        }
-
-
-
-
-
-        function EditPerson() {
-            $("#formName").removeClass("Error");
-            $("#formName").addClass("Validate");
-            $("#formLastName").removeClass("Error");
-            $("#formLastName").addClass("Validate");
-            if (ValidateInputs($("#formName").val(), $("#formLastName").val())) {
-                $.ajaxSetup({ async: false });
-                $.ajax({
-                    type: "PUT",
-                    url: "/Person/Edit",
-                    data: JSON.stringify({
-                        personId: $("#UserId").val(),
-                        name: $("#formName").val(),
-                        lastName: $("#formLastName").val(),
-                    }),
-                    dataType: "json",
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (data) {
-                        if (data) {
-
-                            $.ajaxSetup({ async: false });
-                            $.ajax({
-                                type: "PUT",
-                                url: "/Person/Edit",
-                                data: JSON.stringify({
-                                    personId: $("#UserId").val(),
-                                    name: $("#formName").val(),
-                                    lastName: $("#formLastName").val(),
-                                }),
-                                dataType: "json",
-                                contentType: 'application/json; charset=utf-8',
-                                success: function (data) {
-                                    if (data) {
-
-                                        console.log(data);
-                                        var obj = {
-                                            personId: data.personId,
-                                            name: data.name,
-                                            lastName: data.lastName
-                                        }
-                                        $table.row($("#indexId").val()).data(obj).draw();
-                                        $("#closeMyModal").click();
-                                    }
-                                    else {
-                                        //ValidateMyAlert("Class='alert alert-warning'", 'Something is wrong', 'Warning', "#alertContainer");
-                                    }
-                                },
-                                error: function () {
-                                    //ValidateMyAlert("Class='alert alert-danger'", 'Error whith edit', 'Danger', "#alertContainer");
-                                }
-                            });
-                        }
-                    }
-                });
-            } else {
-                console.log("no sirve");
-            }
-
-        }
-
-
-
-        //<!--charge friend -- >
-        function ChargeFriendSelect(button) {
-
-            var ActualRow = $(button).parents("tr");
-            var rowIndex = $table.row(ActualRow).index();
-            var row = $table.row(rowIndex).data();
-            $("#ActualId").val(row.personId);
             $.ajax({
-                type: "POST",
-                url: "/Person/GetNoneFriends",
-                data: JSON.stringify($("#ActualId").val(), 2),
+                type: "DELETE",
+                url: "/Person/Delete",
+                data: JSON.stringify($("#HiddenIndexDelete").val()),
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
 
-                    var listItems = '<option selected="selected" value="-1">Select a friend</option>';
-                    for (var i = 0; i < data.length; i++) {
-                        listItems += "<option value='" + data[i].personId + "'>" + data[i].name + "</option>";
+                    if (data) {
+                        $table.row($("#indexId").val()).remove().draw();
+                        ValidateMyAlert("alert-success'", 'the person with the id ' + $("#HiddenIndexDelete").val() + ' was Deleted', "#alertContainer");
+
                     }
-                    $("#listPeople").html(listItems);
+                    else {
+                        ValidateMyAlert("alert-warning'", ' Could not delete ', "#alertContainer");
+                    }
+                },
+                error: function () {
+                    ValidateMyAlert("alert-danger'", 'error', 'Danger', "#alertContainer");
+                }
+            });
+            $("#closeDeleteModal").click();
+        })
+
+    });
+
+    function ShowFriends(button) {
+        var actualRow = $(button).parents("tr");
+        var rowIndex = $table.row(actualRow).index();
+        var row = $table.row(rowIndex).data();
+
+
+        window.location.replace('http://' + window.location.host + '/Person/RelationGraph?personId=' + row.personId);
+    }
+
+    function CreatePerson() {
+        $("#formName").removeClass("Error");
+        $("#formName").addClass("Validate");
+        $("#formLastName").removeClass("Error");
+        $("#formLastName").addClass("Validate");
+        if (ValidateInputs($("#formName").val(), $("#formLastName").val())) {
+            $.ajax({
+                type: "POST",
+                url: "/Person/Create",
+                data: JSON.stringify({
+                    Name: $("#formName").val(),
+                    LastName: $("#formLastName").val()
+                }),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data) {
+                        console.log(data)
+                        var obj = {
+                            personId: data.personId,
+                            name: data.name,
+                            lastName: data.lastName
+                        };
+                        console.log(obj.personId);
+                        $table.row.add(obj).draw();
+                        $("#closeMyModal").click();
+                        ValidateMyAlert("Class='alert alert-success'", 'the person was added', 'success', "#alertContainer");
+                    }
+                    else { ValidateMyAlert("Class='alert alert-warning'", 'Could not be added', 'Warning', "#alertContainer"); }
+                },
+                error: function () {
+                    console.log("error, ajax couldn't Create a person")
+                }
+            });
+        }
+    }
+
+
+    function removePerson(button) {
+        var actualRow = $(button).parents("tr");
+        var rowIndex = $table.row(actualRow).index();
+        var row = $table.row(rowIndex).data();
+        $("#HiddenIndexDelete").val(row.personId);
+        $("#indexId").val(rowIndex);
+    }
+
+    function editRow(button) {
+
+        $("#BtnCreatePerson").css("display", "none");
+        $("#BtnEditPerson").css("display", "inline");
+        $("#UserId").css("display", "inline");
+        $("#titleModel").text("Edit Person");
+        var ActualRow = $(button).parents("tr");
+        var rowIndex = $table.row(ActualRow).index();
+        var row = $table.row(rowIndex).data();
+        $("#UserId").val(row.personId);
+        $("#formName").val(row.name);
+        $("#formLastName").val(row.lastName);
+        $("#indexId").val(rowIndex);
+
+    }
+
+
+
+
+
+    function EditPerson() {
+        $("#formName").removeClass("Error");
+        $("#formName").addClass("Validate");
+        $("#formLastName").removeClass("Error");
+        $("#formLastName").addClass("Validate");
+        if (ValidateInputs($("#formName").val(), $("#formLastName").val())) {
+            $.ajaxSetup({ async: false });
+            $.ajax({
+                type: "PUT",
+                url: "/Person/Edit",
+                data: JSON.stringify({
+                    personId: $("#UserId").val(),
+                    name: $("#formName").val(),
+                    lastName: $("#formLastName").val(),
+                }),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data) {
+
+                        $.ajaxSetup({ async: false });
+                        $.ajax({
+                            type: "PUT",
+                            url: "/Person/Edit",
+                            data: JSON.stringify({
+                                personId: $("#UserId").val(),
+                                name: $("#formName").val(),
+                                lastName: $("#formLastName").val(),
+                            }),
+                            dataType: "json",
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (data) {
+                                if (data) {
+
+                                    console.log(data);
+                                    var obj = {
+                                        personId: data.personId,
+                                        name: data.name,
+                                        lastName: data.lastName
+                                    }
+                                    $table.row($("#indexId").val()).data(obj).draw();
+                                    $("#closeMyModal").click();
+                                }
+                                else {
+                                    //ValidateMyAlert("Class='alert alert-warning'", 'Something is wrong', 'Warning', "#alertContainer");
+                                }
+                            },
+                            error: function () {
+                                //ValidateMyAlert("Class='alert alert-danger'", 'Error whith edit', 'Danger', "#alertContainer");
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            console.log("no sirve");
+        }
+
+    }
+
+
+
+    //<!--charge friend -- >
+    function ChargeFriendSelect(button) {
+
+        var ActualRow = $(button).parents("tr");
+        var rowIndex = $table.row(ActualRow).index();
+        var row = $table.row(rowIndex).data();
+        $("#ActualId").val(row.personId);
+        $.ajax({
+            type: "POST",
+            url: "/Person/GetNoneFriends",
+            data: JSON.stringify($("#ActualId").val(), 2),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+
+                var listItems = '<option selected="selected" value="-1">Select a friend</option>';
+                for (var i = 0; i < data.length; i++) {
+                    listItems += "<option value='" + data[i].personId + "'>" + data[i].name + "</option>";
+                }
+                $("#listPeople").html(listItems);
+            },
+            error: function () {
+                console.log("error, ajax couldn't charge the table");
+            }
+        });
+        $('#modalHeaderFriendTitle').html('Add New Friend');
+
+    }
+
+    //<!--add friend relationship-- >
+    function linkFriends() {
+
+        if ($("#listPeople option:selected").val() != -1) {
+            $.ajax({
+                type: "POST",
+                url: "/Person/LinkFriends",
+                data: JSON.stringify({
+                    Id1: $("#ActualId").val(),
+                    Id2: $("#listPeople option:selected").val()
+                }),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $("#CloseAddFriendModal").click();
+                    ValidateMyAlert("alert-success'", 'the person with the id ' + $("#ActualId").val() + ' was linked', "#alertContainer");
                 },
                 error: function () {
                     console.log("error, ajax couldn't charge the table");
                 }
             });
-            $('#modalHeaderFriendTitle').html('Add New Friend');
-
+        } else {
+            $("#listPeople").addClass("Error");
         }
 
-        //<!--add friend relationship-- >
-        function linkFriends() {
-            
-            if ($("#listPeople option:selected").val() != -1) {
-                $.ajax({
-                    type: "POST",
-                    url: "/Person/LinkFriends",
-                    data: JSON.stringify({
-                        Id1: $("#ActualId").val(),
-                        Id2: $("#listPeople option:selected").val()
-                    }),
-                    dataType: "json",
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (data) {
-                        $("#CloseAddFriendModal").click();
-                        ValidateMyAlert("alert-success'", 'the person with the id ' + $("#ActualId").val() + ' was linked', "#alertContainer");
-                    },
-                    error: function () {
-                        console.log("error, ajax couldn't charge the table");
-                    }
+    }
+
+
+    function LoadRemoveFriend(button) {
+
+        var actualRow = $(button).parents("tr");
+        var rowIndex = $table.row(actualRow).index();
+        var row = $table.row(rowIndex).data();
+        $("#RemoveFriendPersonId").val(row.personId);
+
+        $.ajax({
+            type: "POST",
+            url: "/Person/GetFriends",
+            data: JSON.stringify($("#RemoveFriendPersonId").val()),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $.each(data, function () {
+                    $("#FriendsSelect").append("<option value=" + this.personId + ">" + this.name + "</option>");
                 });
-            } else {
-                $("#listPeople").addClass("Error");
+            },
+            error: function () {
+                Console.log("error, ajax couldn't charge the select for the remove friend")
             }
+        });
+    }
 
-        }
+    function RemoveFriend() {
 
-
-        function LoadRemoveFriend(button) {
-
-            var actualRow = $(button).parents("tr");
-            var rowIndex = $table.row(actualRow).index();
-            var row = $table.row(rowIndex).data();
-            $("#RemoveFriendPersonId").val(row.personId);
-
+        if ($("#FriendsSelect").val() != -1) {
+            console.log($("#RemoveFriendPersonId").val() + "  " + $("#FriendsSelect").val())
             $.ajax({
                 type: "POST",
-                url: "/Person/GetFriends",
-                data: JSON.stringify($("#RemoveFriendPersonId").val()),
+                url: "/Person/RemoveFriendhip",
+                data: JSON.stringify({ Id1: $("#RemoveFriendPersonId").val(), Id2: $("#FriendsSelect").val() }),
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
                 success: function (data) {
-                    $.each(data, function () {
-                        $("#FriendsSelect").append("<option value=" + this.personId + ">" + this.name + "</option>");
-                    });
+                    if (data) {
+                        console.log("success remove friend")
+                        $("#closeMyModalRemove").click();
+                        ValidateMyAlert("alert-success'", 'the person with the id ' + $("#RemoveFriendPersonId").val() + ' was unlinked', "#alertContainer");
+                    }
                 },
                 error: function () {
-                    Console.log("error, ajax couldn't charge the select for the remove friend")
+                    console.log("error, ajax couldn't remove a friend")
                 }
             });
-        }
-
-        function RemoveFriend() {
-            
-            if ($("#FriendsSelect").val() != -1) {
-                console.log($("#RemoveFriendPersonId").val() + "  " + $("#FriendsSelect").val())
-                $.ajax({
-                    type: "POST",
-                    url: "/Person/RemoveFriendhip",
-                    data: JSON.stringify({ Id1: $("#RemoveFriendPersonId").val(), Id2: $("#FriendsSelect").val() }),
-                    dataType: "json",
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (data) {
-                        if (data) {
-                            console.log("success remove friend")
-                            $("#closeMyModalRemove").click();
-                            ValidateMyAlert("alert-success'", 'the person with the id ' + $("#RemoveFriendPersonId").val() + ' was unlinked', "#alertContainer");
-                        }
-                    },
-                    error: function () {
-                        console.log("error, ajax couldn't remove a friend")
-                    }
-                });
-            } else {
-                $("#FriendsSelect").addClass("Error");
-            }
-            
-
+        } else {
+            $("#FriendsSelect").addClass("Error");
         }
 
 
-        //Validations
-        function ValidateMyAlert(pClass, pString, insertSide) {
+    }
 
-            $("#alertContainer div").remove();
-            $(insertSide).prepend("<div myAlert-top class='myAlert-top alert " + pClass + " alert-dismissible show' role='alert'> <strong>" + pString + "</strong >"
-                + " <a href='#' class= 'close' data-dismiss='alert' aria-label='Close' >&times;</a >"
-                + "</div >");
 
-            setTimeout(function () {
-                $(".myAlert-top").alert('close');
-            }, 2000);
+    //Validations
+    function ValidateMyAlert(pClass, pString, insertSide) {
+
+        $("#alertContainer div").remove();
+        $(insertSide).prepend("<div myAlert-top class='myAlert-top alert " + pClass + " alert-dismissible show' role='alert'> <strong>" + pString + "</strong >"
+            + " <a href='#' class= 'close' data-dismiss='alert' aria-label='Close' >&times;</a >"
+            + "</div >");
+
+        setTimeout(function () {
+            $(".myAlert-top").alert('close');
+        }, 2000);
+    }
+
+
+    function ValidateInputs(name, lastName) {
+        if (name.trim() && lastName.trim()) {
+            return true;
+        } else if (!name.trim() && !lastName.trim()) {
+            $("#formName").removeClass("validate");
+            $("#formName").addClass("Error");
+            $("#formLastName").removeClass("validate");
+            $("#formLastName").addClass("Error");
+        } else if (!name.trim()) {
+            $("#formName").removeClass("validate");
+            $("#formName").addClass("Error");
+            $("#formLastName").removeClass("Error");
+            $("#formLastName").addClass("validate");
+        } else if (!lastName.trim()) {
+            $("#formLastName").removeClass("validate");
+            $("#formLastName").addClass("Error");
+            $("#formName").removeClass("Error");
+            $("#formName").addClass("validate");
         }
+        return false;
 
+    }
+</script>
+}
 
-        function ValidateInputs(name, lastName) {
-            if (name.trim() && lastName.trim()) {
-                return true;
-            } else if (!name.trim() && !lastName.trim()) {
-                $("#formName").removeClass("validate");
-                $("#formName").addClass("Error");
-                $("#formLastName").removeClass("validate");
-                $("#formLastName").addClass("Error");
-            } else if (!name.trim()) {
-                $("#formName").removeClass("validate");
-                $("#formName").addClass("Error");
-                $("#formLastName").removeClass("Error");
-                $("#formLastName").addClass("validate");
-            } else if (!lastName.trim()) {
-                $("#formLastName").removeClass("validate");
-                $("#formLastName").addClass("Error");
-                $("#formName").removeClass("Error");
-                $("#formName").addClass("validate");
-            }
-            return false;
-            
-        }
-    </script>
-</head>
-<body>
+<div class="container">
     <div class="container">
 
         <br>
@@ -413,7 +402,7 @@
         <h2 class="text-center">People List</h2>
         <div id="alertContainer"> </div>
         <br />
-        <a class="btn btn-primary" data-toggle="modal" data-target="#ModalPerson"><strong>Nuevo</strong> <i class="fa fa-plus"></i></a>
+        <a class="btn btn-primary" data-toggle="modal" data-target="#ModalPerson"><strong>Add</strong> <i class="fa fa-plus"></i></a>
         <br />
         <br />
 
@@ -497,7 +486,7 @@
 
                     <div class="modal-footer d-flex justify-content-center">
                         <button class="btn btn-danger" id="BtnRemoveFriend" onclick="RemoveFriend()">Remove</button>
-                        
+
                     </div>
                 </div>
             </div>
@@ -552,5 +541,6 @@
         </div>
     </div>
 
-</body>
-</html>
+</div>
+
+    
