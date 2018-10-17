@@ -225,7 +225,7 @@
                                         lastName: data.lastName
                                     }
                                     $table.row($("#indexId").val()).data(obj).draw();
-                                    ValidateMyAlert("alert-warning", 'Something is wrong', "#alertContainer");
+                                    ValidateMyAlert("alert-success", 'The person was edited', "#alertContainer");
                                     $("#closeMyModal").click();
                                 }
                                 else {
@@ -240,7 +240,7 @@
                 }
             });
         } else {
-            console.log("no sirve");
+            console.log("not working");
         }
 
     }
@@ -334,7 +334,7 @@
             console.log($("#RemoveFriendPersonId").val() + "  " + $("#FriendsSelect").val())
             $.ajax({
                 type: "POST",
-                url: "/Person/RemoveFriendhip",
+                url: "/Person/RemoveFriendship",
                 data: JSON.stringify({ Id1: $("#RemoveFriendPersonId").val(), Id2: $("#FriendsSelect").val() }),
                 dataType: "json",
                 contentType: 'application/json; charset=utf-8',
@@ -469,7 +469,7 @@
 
                 <div class="modal-header text-center">
 
-                    <button type="button" class="close" data-dismiss="modal" id="closeMyModalRemove" aria-label="Close" onclick="DeleteRedErrors()">
+                    <button type="button" class="close" data-dismiss="modal" id="closeMyModalRemove" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
 
