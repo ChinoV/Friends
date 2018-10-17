@@ -65,6 +65,10 @@
             $("#BtnEditPerson").css("display", "none");
             $("#UserId").css("display", "none");
             $("#titleModel").text("Create new Person");
+            $("#formName").removeClass("Error");
+            $("#formName").addClass("Validate");
+            $("#formLastName").removeClass("Error");
+            $("#formLastName").addClass("Validate");
         });
 
         //<!--clean Remove Friend -- >
@@ -118,10 +122,7 @@
     }
 
     function CreatePerson() {
-        $("#formName").removeClass("Error");
-        $("#formName").addClass("Validate");
-        $("#formLastName").removeClass("Error");
-        $("#formLastName").addClass("Validate");
+       
         if (ValidateInputs($("#formName").val(), $("#formLastName").val())) {
             $.ajax({
                 type: "POST",
