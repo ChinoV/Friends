@@ -18,28 +18,6 @@ namespace FriendsWebApp.Controllers
         //get
         public IActionResult Index()
         {
-            //_context.AddPerson(new Person
-            //{
-            //    Name = "James",
-            //    LastName = "Howlett"
-            //});
-
-            //_context.AddPerson(new Person
-            //{
-            //    Name = "Eric",
-            //    LastName = "Lehnsherr"
-            //});
-
-            //_context.AddPerson(new Person
-            //{
-            //    Name = "Charles",
-            //    LastName = "Xavier"
-            //});
-
-            //_context.LinkFriends(1, 2);
-            //_context.LinkFriends(1, 3);
-            //_context.LinkFriends(2, 3);
-
             return View();
         }
 
@@ -207,7 +185,6 @@ namespace FriendsWebApp.Controllers
             return null;
         }
 
-        //get
         [HttpDelete]
         public IActionResult Delete([FromBody]int personId)
         {
@@ -240,8 +217,7 @@ namespace FriendsWebApp.Controllers
             catch (System.Exception)
             {
                 throw;
-            }
-            
+            }            
         }
     }
 }

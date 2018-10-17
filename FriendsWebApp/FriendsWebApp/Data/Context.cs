@@ -316,7 +316,7 @@ namespace FriendsWebApp.Data
         {
 
             List<JPerson> People = new List<JPerson>();
-            SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Id1, Name1, Last1, Id2, Name2, Last2 FROM [dbo].[GetGraph](" + id + ")", _database);
+            SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Id1, Name1, Last1, Id2, Name2, Last2 FROM [dbo].[GetGraph](" + id + ") ORDER BY "+id, _database);
             cmd.CommandTimeout = 0;
 
             _database.Open();
