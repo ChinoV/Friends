@@ -59,7 +59,6 @@ namespace FriendsWebApp.Controllers
                 neighbors.Length--;
             }
 
-
             JPerson[] jPeople = new JPerson[PeopleList.Count];
             for (int i = 0; i < PeopleList.Count; i++)
             {
