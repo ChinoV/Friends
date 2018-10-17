@@ -64,16 +64,16 @@ namespace FriendsWebApp.Controllers
 
                 if (i == 0)
                 {
-                    PeopleList[i].Left = "248.859px";
+                    PeopleList[i].Left = "40%";
                 }
                 else if (i % 2 != 0)
                 {
                     Top += 126;
-                    PeopleList[i].Left = "80.8594px";
+                    PeopleList[i].Left = "20%";
                 }
                 else
                 {
-                    PeopleList[i].Left = "416.859px";
+                    PeopleList[i].Left = "60%";
                 }
                 PeopleList[i].Top = Top + "px";
 
