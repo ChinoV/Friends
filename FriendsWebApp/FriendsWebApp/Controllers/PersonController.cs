@@ -54,9 +54,11 @@ namespace FriendsWebApp.Controllers
                     PeopleList[i].Left = "416.859px";
                 }
                 PeopleList[i].Top = Top + "px";
-
-
-                neighbors.Length--;
+                
+                if (neighbors.Length > 0)
+                {
+                    neighbors.Length--;
+                }
             }
 
             JPerson[] jPeople = new JPerson[PeopleList.Count];
@@ -135,24 +137,24 @@ namespace FriendsWebApp.Controllers
             {
                 return Json(new { success = false });
             }
-           
+
         }
 
         [HttpPost]
         public IActionResult RemoveFriendship([FromBody]DoubleParam personIds)
         {
             try
-            {                
+            {
                 if (_context.RemoveFriendship(personIds.Id1, personIds.Id2))
                 {
                     return Json(new { success = true });
                 }
-                return Json(new { success = false }); 
+                return Json(new { success = false });
             }
             catch (System.Exception)
             {
                 return Json(new { success = false });
-            }            
+            }
         }
 
         [HttpPost]
@@ -172,7 +174,7 @@ namespace FriendsWebApp.Controllers
             }
         }
 
-        
+
         [HttpPost]
         public Person Create([FromBody]Person person)
         {
@@ -216,7 +218,7 @@ namespace FriendsWebApp.Controllers
             catch (System.Exception)
             {
                 throw;
-            }            
+            }
         }
     }
 }

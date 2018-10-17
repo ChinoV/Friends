@@ -23,7 +23,7 @@ namespace FriendsWebApp.Data
             try
             {
                 Person person = new Person();
-                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName, PersonId FROM PEOPLE WHERE Id = " + id, _database);
+                SqlCommand cmd = new SqlCommand("USE [FriendsDB] SELECT Name, LastName, PersonId FROM PEOPLE WHERE PersonId = " + id, _database);
                 cmd.CommandTimeout = 0;
 
                 _database.Open();
@@ -344,7 +344,7 @@ namespace FriendsWebApp.Data
                         });
                     }
 
-                    if (!People.FirstOrDefault(s=>s.Id == Id1).Neighbors.Any(s=>s==Id2))
+                    if (!People.FirstOrDefault(s => s.Id == Id1).Neighbors.Any(s => s == Id2))
                     {
                         People.FirstOrDefault(s => s.Id == Id1).Neighbors.Add(Id2);
                     }
@@ -355,6 +355,15 @@ namespace FriendsWebApp.Data
                     }
                 }
                 _database.Close();
+                if (People.Count == 0)
+                {
+                    var initialPerson = GetPerson(id);
+                    People.Add(new JPerson()
+                    {
+                        Id = id,
+                        Text = initialPerson.Name + " " + initialPerson.LastName
+                    });
+                }
                 return People;
             }
 
