@@ -9,6 +9,11 @@
     width: 96%;
 }
 
+#alertContainer {
+    text-align: center;
+    font-size:14pt;
+}
+
 .Error {
     border: solid 1px red;
 }
